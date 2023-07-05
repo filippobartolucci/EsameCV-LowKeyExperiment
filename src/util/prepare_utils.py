@@ -131,6 +131,23 @@ class dim_reduction(nn.Module):
 
 def get_ensemble(models, sigma_gf, kernel_size_gf, combination, V_reduction, warp=False,
                                        theta_warp=None):
+
+    """
+    Prepares an ensemble of feature extractors for a given set of models, with optional Gaussian filtering and dimensionality reduction.
+
+    Args:
+        models (list): A list of PyTorch nn models to extract features from.
+        sigma_gf (float): Standard deviation of the Gaussian filter to apply during feature extraction, or None if no filtering is desired.
+        kernel_size_gf (int): Size of the Gaussian kernel to use for filtering.
+        combination (bool): Whether to include a second feature extractor without Gaussian filtering in the ensemble.
+        V_reduction (list): A list of matrices to use for dimensionality reduction, or None if no reduction is desired.
+        warp (bool): Whether to apply random warping to the input images during feature extraction.
+        theta_warp (float): Maximum angle of rotation to use for random warping.
+
+    Returns:
+        A list of PyTorch nn models representing the ensemble of feature extractors.
+    """
+
     # function prepares ensemble of feature extractors
     # outputs list of pytorch nn models 
     feature_extractor_ensemble = []
@@ -177,14 +194,22 @@ def get_ensemble(models, sigma_gf, kernel_size_gf, combination, V_reduction, war
 
 
 def extract_features(imgs, feature_extractor_ensemble, dim):
-    # function computes mean feature vector of images with ensemble of feature extractors 
+    """ 
+    Computes the mean feature vector of a batch of images using an ensemble of feature extractors.
 
+    Args:
+        imgs (torch.Tensor): A tensor of shape (batch_size, channels, height, width) containing the input images.
+        feature_extractor_ensemble (list): A list of PyTorch nn models representing the ensemble of feature extractors.
+        dim (int): The dimension of the feature vectors.
+
+    Returns:
+        A tensor of shape (batch_size, num_models, dim) containing the mean feature vectors of the input images.
+    """
     features = torch.zeros(imgs.shape[0], len(feature_extractor_ensemble), dim)
     for i, feature_extractor_model in enumerate(feature_extractor_ensemble):
         # batch size, model in ensemble, dim
         features_model = feature_extractor_model(imgs)
         features[:, i, :] = features_model
-
 
     return features
 
