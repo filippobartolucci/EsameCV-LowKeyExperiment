@@ -81,8 +81,10 @@ def findNonreflectiveSimilarity(uv, xy, options=None):
 
     # We know that X * r = U
     if rank(X) >= 2 * K:
-        r, _, _, _ = lstsq(X, U)
-        # r, _, _, _ = lstsq(X, U, rcond=None)
+        # FutureWarning: `rcond` parameter will change to the default of machine precision times ``max(M, N)`` where M and N are the input matrix dimensions.
+        # To use the future default and silence this warning we advise to pass `rcond=None`, to keep using the old, explicitly pass `rcond=-1`.
+        # r, _, _, _ = lstsq(X, U)
+        r, _, _, _ = lstsq(X, U, rcond=None)
         r = np.squeeze(r)
     else:
         raise Exception("cp2tform: two Unique Points Req")

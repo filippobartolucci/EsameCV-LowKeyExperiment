@@ -17,11 +17,7 @@ from lpips_pytorch import LPIPS, lpips
 
 from tqdm import tqdm 
 
-
-device = "cuda" if torch.cuda.is_available() else "cpu"
-if torch.backends.mps.is_available():
-    device = "mps"
-
+device = "cuda" if torch.cuda.is_available() else ("mps" if torch.backends.mps.is_available() else "cpu")
 
 tensor_transform = transforms.ToTensor()
 pil_transform = transforms.ToPILImage()
@@ -127,7 +123,3 @@ class Attack(nn.Module):
          torch.mean(torch.abs(perturbation[:, :, :-1, :] - perturbation[:, :, 1:, :]))
 
         return tv
-
-
-
-

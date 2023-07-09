@@ -160,9 +160,12 @@ cython_debug/
 #.idea/
 
 */imgs/*
-.DS_Store
-*/.DS_Store*
+*.DS_Store
+*/.DS_Store
 */.i
 *.pth
-
+*/lpips_pytorch
+/imdb_face/
 /LowKey_code/lpips_pytorch
+*/my_dataset/
+.DS_Store

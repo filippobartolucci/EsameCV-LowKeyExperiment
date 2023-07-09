@@ -17,8 +17,6 @@ import sys, os
 import time 
 import my_utils
 
-import warnings 
-warnings.filterwarnings("ignore")
 
 device = "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
 print('\n' + '-' * 20  +'\nUsing device: {}\n'.format(device) + '-' * 20)

@@ -67,8 +67,9 @@ class PNet(nn.Module):
         x = self.features(x)
         a = self.conv4_1(x)
         b = self.conv4_2(x)
-        a = F.softmax(a)
-        # a = F.softmax(a, dim=1)
+        # a = F.softmax(a)
+        # UserWarning: Implicit dimension choice for softmax has been deprecated. Change the call to include dim=X as an argument.
+        a = F.softmax(a, dim=1)
         return b, a
 
 

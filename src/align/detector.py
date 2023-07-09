@@ -79,9 +79,10 @@ def detect_faces(image, min_face_size = 20.0,
 
     img_boxes = get_image_boxes(bounding_boxes, image, size = 24)
     
-    img_boxes = Variable(torch.FloatTensor(img_boxes), volatile = True)
-    # with torch.no_grad():
-    #     img_boxes = Variable(torch.FloatTensor(img_boxes))
+    # UserWarning: volatile was removed and now has no effect. Use `with torch.no_grad():` instead.
+    # img_boxes = Variable(torch.FloatTensor(img_boxes), volatile = True)
+    with torch.no_grad():
+        img_boxes = Variable(torch.FloatTensor(img_boxes))
 
     output = rnet(img_boxes)
     offsets = output[0].data.numpy()  # shape [n_boxes, 4]
