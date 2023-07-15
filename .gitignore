@@ -168,4 +168,5 @@ cython_debug/
 /imdb_face/
 /LowKey_code/lpips_pytorch
 */my_dataset/
+*/facescrub/
 .DS_Store

@@ -114,7 +114,8 @@ def crop_dataset(source_dir = "./my_dataset/original", face_dir =  "./my_dataset
 				continue
 
 			# crop the face and save it in the new dir
-			img = Image.open(os.path.join(source_dir, dir_name, img_name))
+			print("Processing image {}".format(dir_name + "/" + img_name), end = '\n')
+			img = Image.open(os.path.join(source_dir, dir_name, img_name)).convert("RGB")
 			img = get_cropped_face(img)
 			img.save(os.path.join(face_dir, dir_name, img_name))
 
@@ -139,7 +140,7 @@ def get_dataset(source_dir):
 
 	return X, Y
 
-def my_split(X, Y):
+def my_split(X, Y, split = "1"):
 	X1 = []
 	Y1 = []
 
@@ -147,7 +148,7 @@ def my_split(X, Y):
 	Y2 = []
 
 	for i, _ in enumerate(X):
-		if X[i].endswith("1.jpg") or X[i].endswith("1_attacked.png"):
+		if X[i].endswith(split + ".jpg") or X[i].endswith(split + "_attacked.png"):
 			X1.append(X[i])
 			Y1.append(Y[i])
 		else:
@@ -268,3 +269,20 @@ def extract_features(model, dataset, batch_size=4):
 			X.append(batch_features.cpu().numpy())
 	X = np.concatenate(X, axis=0)
 	return X
+
+
+def mixset(X_set1, X_set2, Y_set1, Y_set2, n):
+	mixed_x = []
+	mixed_y = []
+	n = 5-n
+
+	for i in range(len(X_set1)):
+		m = int(X_set1[i].split("/")[-1].split(".")[0].split("_")[0])
+		if (m > n): 
+			mixed_x.append(X_set1[i])
+			mixed_y.append(Y_set1[i])
+		else:
+			mixed_x.append(X_set2[i])
+			mixed_y.append(Y_set2[i])
+
+	return mixed_x, mixed_y
