@@ -1,5 +1,6 @@
 from align.align_trans import get_reference_facial_points, warp_and_crop_face
 from backbone.model_irse import IR_50, IR_101, IR_152, IR_SE_50, IR_SE_101, IR_SE_152
+from backbone.model_resnet import ResNet_50, ResNet_101, ResNet_152
 from util.prepare_utils import prepare_models, prepare_dir_vec, get_ensemble, prepare_data
 import torchvision.transforms as transforms
 from align.detector import detect_faces
@@ -33,8 +34,7 @@ def get_model(name, path, input_size=(112,112)):
 		'ir101': IR_101,
 		'ir152': IR_152,
 		'irse50': IR_SE_50,
-		'irse101': IR_SE_101,
-		'irse152': IR_SE_152
+		'resnet_152': ResNet_152
 	}
 
 	if name not in models:
@@ -226,6 +226,15 @@ def attack_dataset(source_dir, target_dir, models=None, model_paths=None, input_
 
 	imgs_paths, _ = get_dataset(source_dir)	
 	idx = 0
+
+	# for each img in imgs_paths
+	# check if it is already attacked
+	# if it is, remove it from imgs_paths
+
+	for i, img_path in enumerate(imgs_paths):
+		relative_path = img_path.split('/')[-2] + '/' + img_path.split('/')[-1]
+		if os.path.exists(os.path.join(target_dir, relative_path[:-4] + "_attacked.png")):
+			imgs_paths.remove(img_path)
 
 	while idx < len(imgs_paths):
 		print("Processing batch {} of {}".format(idx // batch + 1, len(imgs_paths) // batch + 1), end = '\r')
