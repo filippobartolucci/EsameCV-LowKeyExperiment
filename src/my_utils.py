@@ -131,7 +131,7 @@ def get_dataset(source_dir):
 	X = []
 	Y = []
 
-	for root, dirs, files in os.walk(source_dir):
+	for root, _, files in os.walk(source_dir):
 		for file in natsort.natsorted(files):
 			if file.endswith(".DS_Store"):
 				continue
@@ -139,23 +139,6 @@ def get_dataset(source_dir):
 			Y.append(os.path.basename(root))
 
 	return X, Y
-
-def my_split(X, Y, split = "1"):
-	X1 = []
-	Y1 = []
-
-	X2 = []
-	Y2 = []
-
-	for i, _ in enumerate(X):
-		if X[i].endswith(split + ".jpg") or X[i].endswith(split + "_attacked.png"):
-			X1.append(X[i])
-			Y1.append(Y[i])
-		else:
-			X2.append(X[i])
-			Y2.append(Y[i])
-
-	return X1, Y1, X2, Y2
 
 
 def attack_dataset(source_dir, target_dir, models=None, model_paths=None, input_size=(112, 112), batch = 4, kernel_size_gf = 7, sigma_gf = 3):
@@ -278,20 +261,3 @@ def extract_features(model, dataset, batch_size=4):
 			X.append(batch_features.cpu().numpy())
 	X = np.concatenate(X, axis=0)
 	return X
-
-
-def mixset(X_set1, X_set2, Y_set1, Y_set2, n):
-	mixed_x = []
-	mixed_y = []
-	n = 5-n
-
-	for i in range(len(X_set1)):
-		m = int(X_set1[i].split("/")[-1].split(".")[0].split("_")[0])
-		if (m > n): 
-			mixed_x.append(X_set1[i])
-			mixed_y.append(Y_set1[i])
-		else:
-			mixed_x.append(X_set2[i])
-			mixed_y.append(Y_set2[i])
-
-	return mixed_x, mixed_y

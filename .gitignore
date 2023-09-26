@@ -168,5 +168,7 @@ cython_debug/
 /imdb_face/
 /LowKey_code/lpips_pytorch
 */my_dataset/
-*/facescrub/
+*/facescrub*
 .DS_Store
+*/GANimation/
+*.jpg
